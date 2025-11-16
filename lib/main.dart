@@ -14,9 +14,9 @@ void main() {
 
   final getTasks = GetTasks(repo);
   final addTask = AddTask(repo);
-  final toggleTak = ToggleTask(repo);
+  final toggleTaks = ToggleTask(repo);
 
-  runApp(MyApp(getTasks: getTasks, addTask: addTask, toggleTask: toggleTak));
+  runApp(MyApp(getTasks: getTasks, addTask: addTask, toggleTask: toggleTaks));
 }
 
 class MyApp extends StatelessWidget {

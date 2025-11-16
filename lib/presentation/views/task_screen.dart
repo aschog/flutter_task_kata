@@ -16,11 +16,11 @@ class TaskScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Tasks')),
       body: Column(
         children: [
-          // if (state.tasks.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('No tasks yet'),
-          ),
+          if (state.tasks.isEmpty)
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('No tasks yet'),
+            ),
 
           Padding(
             padding: const EdgeInsets.all(8),
