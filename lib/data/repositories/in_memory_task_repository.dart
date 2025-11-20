@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter_task_kata/domain/entities/task.dart';
 import 'package:flutter_task_kata/domain/repositories/task_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: TaskRepository)
 class InMemoryTaskRepository implements TaskRepository {
   final List<Task> _tasks = [];
   final _rand = Random();

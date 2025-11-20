@@ -4,6 +4,7 @@ import 'package:flutter_task_kata/domain/entities/task.dart';
 import 'package:flutter_task_kata/domain/usecases/add_task.dart';
 import 'package:flutter_task_kata/domain/usecases/get_tasks.dart';
 import 'package:flutter_task_kata/domain/usecases/toggle_task.dart';
+import 'package:injectable/injectable.dart';
 
 class TaskState extends Equatable {
   final List<Task> tasks;
@@ -24,6 +25,7 @@ class TaskState extends Equatable {
   List<Object> get props => [tasks, isLoading];
 }
 
+@injectable
 class TaskCubit extends Cubit<TaskState> {
   final AddTask addTask;
   final GetTasks getTasks;

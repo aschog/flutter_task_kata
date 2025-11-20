@@ -1,5 +1,7 @@
 import 'package:flutter_task_kata/domain/repositories/task_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class AddTask {
   AddTask(this.repo);
   final TaskRepository repo;
