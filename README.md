@@ -35,3 +35,28 @@ Previously, dependencies were created and passed down manually. This commit intr
 
 ---
 
+## 🏗️ Architecture
+
+This project follows the **Clean Architecture** principles to ensure separation of concerns, testability, and scalability.
+
+### Layers
+
+1.  **Domain Layer** (`lib/domain/`)
+    *   **Entities**: Core business objects (e.g., `Task`).
+    *   **Repositories**: Abstract interfaces defining data operations.
+    *   **Use Cases**: Encapsulate specific business rules (e.g., `AddTask`, `GetTasks`).
+    *   *Note: This layer is independent of external frameworks.*
+
+2.  **Data Layer** (`lib/data/`)
+    *   **Repositories**: Implementations of domain repositories (e.g., `InMemoryTaskRepository`).
+    *   Responsible for data retrieval and persistence.
+
+3.  **Presentation Layer** (`lib/presentation/`)
+    *   **State Management**: Uses **Cubit** (`flutter_bloc`) to manage UI state.
+    *   **Widgets**: UI components that observe state changes.
+
+### Key Libraries & Tools
+
+*   **[flutter_bloc](https://pub.dev/packages/flutter_bloc)**: State management.
+*   **[get_it](https://pub.dev/packages/get_it) & [injectable](https://pub.dev/packages/injectable)**: Dependency Injection.
+*   **[equatable](https://pub.dev/packages/equatable)**: Value equality for classes.
