@@ -3,13 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:flutter_task_kata/domain/entities/task.dart' as _i6;
+import 'package:flutter_task_kata/domain/entities/task.dart' as _i3;
 import 'package:flutter_task_kata/domain/repositories/task_repository.dart'
     as _i2;
-import 'package:flutter_task_kata/domain/usecases/add_task.dart' as _i3;
-import 'package:flutter_task_kata/domain/usecases/get_tasks.dart' as _i5;
+import 'package:flutter_task_kata/domain/usecases/add_task.dart' as _i4;
+import 'package:flutter_task_kata/domain/usecases/get_tasks.dart' as _i6;
 import 'package:flutter_task_kata/domain/usecases/toggle_task.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -34,10 +34,15 @@ class _FakeTaskRepository_0 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
+class _FakeTask_1 extends _i1.SmartFake implements _i3.Task {
+  _FakeTask_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [AddTask].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAddTask extends _i1.Mock implements _i3.AddTask {
+class MockAddTask extends _i1.Mock implements _i4.AddTask {
   MockAddTask() {
     _i1.throwOnMissingStub(this);
   }
@@ -51,19 +56,20 @@ class MockAddTask extends _i1.Mock implements _i3.AddTask {
           as _i2.TaskRepository);
 
   @override
-  _i4.Future<void> call(String? title) =>
+  _i5.Future<_i3.Task> call(String? title) =>
       (super.noSuchMethod(
             Invocation.method(#call, [title]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i5.Future<_i3.Task>.value(
+              _FakeTask_1(this, Invocation.method(#call, [title])),
+            ),
           )
-          as _i4.Future<void>);
+          as _i5.Future<_i3.Task>);
 }
 
 /// A class which mocks [GetTasks].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetTasks extends _i1.Mock implements _i5.GetTasks {
+class MockGetTasks extends _i1.Mock implements _i6.GetTasks {
   MockGetTasks() {
     _i1.throwOnMissingStub(this);
   }
@@ -77,12 +83,12 @@ class MockGetTasks extends _i1.Mock implements _i5.GetTasks {
           as _i2.TaskRepository);
 
   @override
-  _i4.Future<List<_i6.Task>> call() =>
+  _i5.Future<List<_i3.Task>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i4.Future<List<_i6.Task>>.value(<_i6.Task>[]),
+            returnValue: _i5.Future<List<_i3.Task>>.value(<_i3.Task>[]),
           )
-          as _i4.Future<List<_i6.Task>>);
+          as _i5.Future<List<_i3.Task>>);
 }
 
 /// A class which mocks [ToggleTask].
@@ -102,11 +108,11 @@ class MockToggleTask extends _i1.Mock implements _i7.ToggleTask {
           as _i2.TaskRepository);
 
   @override
-  _i4.Future<void> call(String? title) =>
+  _i5.Future<void> call(String? id) =>
       (super.noSuchMethod(
-            Invocation.method(#call, [title]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            Invocation.method(#call, [id]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i5.Future<void>);
 }

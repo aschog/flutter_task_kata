@@ -24,6 +24,7 @@ void main() {
   setUp(() {
     mockCubit = MockTaskCubit();
     when(mockCubit.state).thenReturn(initalState);
+    when(mockCubit.stream).thenAnswer((_) => Stream.value(initalState));
   });
 
   testWidgets('shows empty message when no tasks', (tester) async {
@@ -36,8 +37,8 @@ void main() {
     when(mockCubit.state).thenReturn(
       const TaskState(
         tasks: [
-          Task(title: 'A'),
-          Task(title: 'B', isDone: true),
+          Task(id: '1', title: 'A'),
+          Task(id: '2', title: 'B', isDone: true),
         ],
         isLoading: false,
       ),
@@ -52,12 +53,12 @@ void main() {
   testWidgets('tapping a task toggles it', (tester) async {
     when(
       mockCubit.state,
-    ).thenReturn(const TaskState(tasks: [Task(title: 'A')], isLoading: false));
+    ).thenReturn(const TaskState(tasks: [Task(id: '1', title: 'A')], isLoading: false));
 
     await tester.pumpWidget(makeTestable(const TaskScreen()));
 
     await tester.tap(find.text('A'));
-    verify(mockCubit.toggleTaskAction('A')).called(1);
+    verify(mockCubit.toggleTaskAction('1')).called(1);
   });
 
   testWidgets('adding a task calls addTaskAction', (tester) async {

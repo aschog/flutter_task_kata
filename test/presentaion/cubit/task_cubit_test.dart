@@ -26,7 +26,7 @@ void main() {
     blocTest<TaskCubit, TaskState>(
       'loads task',
       build: () {
-        when(mockGet()).thenAnswer((_) async => [const Task(title: 'A')]);
+        when(mockGet()).thenAnswer((_) async => [const Task(id: '1', title: 'A')]);
         return TaskCubit(
           getTasks: mockGet,
           addTask: mockAdd,
@@ -36,7 +36,7 @@ void main() {
       act: (cubit) => cubit.loadTasks(),
       expect: () => [
         const TaskState(tasks: [], isLoading: true),
-        const TaskState(tasks: [Task(title: 'A')], isLoading: false),
+        const TaskState(tasks: [Task(id: '1', title: 'A')], isLoading: false),
       ],
       verify: (_) {
         verify(mockGet()).called(1);
@@ -46,10 +46,8 @@ void main() {
     blocTest<TaskCubit, TaskState>(
       'add new task',
       build: () {
-        when(mockAdd('New Task')).thenAnswer((_) async {});
-        when(
-          mockGet(),
-        ).thenAnswer((_) async => [const Task(title: 'New Task')]);
+        const t = Task(id: '1', title: 'New Task');
+        when(mockAdd('New Task')).thenAnswer((_) async => t);
         return TaskCubit(
           getTasks: mockGet,
           addTask: mockAdd,
@@ -59,28 +57,26 @@ void main() {
       act: (cubit) => cubit.addTaskAction('New Task'),
       expect: () => [
         const TaskState(tasks: [], isLoading: true),
-        const TaskState(tasks: [Task(title: 'New Task')], isLoading: false),
+        const TaskState(tasks: [Task(id: '1', title: 'New Task')], isLoading: false),
       ],
     );
 
     blocTest<TaskCubit, TaskState>(
       'toggles a task',
+      seed: () => const TaskState(tasks: [Task(id: '1', title: 'A')], isLoading: false),
       build: () {
-        when(mockToggle('A')).thenAnswer((_) async {});
-        when(
-          mockGet(),
-        ).thenAnswer((_) async => [const Task(title: 'A', isDone: true)]);
+        when(mockToggle('1')).thenAnswer((_) async {});
         return TaskCubit(
           getTasks: mockGet,
           addTask: mockAdd,
           toggleTask: mockToggle,
         );
       },
-      act: (cubit) => cubit.toggleTaskAction('A'),
+      act: (cubit) => cubit.toggleTaskAction('1'),
       expect: () => [
-        const TaskState(tasks: [], isLoading: true),
+        const TaskState(tasks: [Task(id: '1', title: 'A')], isLoading: true),
         const TaskState(
-          tasks: [Task(title: 'A', isDone: true)],
+          tasks: [Task(id: '1', title: 'A', isDone: true)],
           isLoading: false,
         ),
       ],

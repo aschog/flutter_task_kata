@@ -9,20 +9,30 @@ import 'package:injectable/injectable.dart';
 class TaskState extends Equatable {
   final List<Task> tasks;
   final bool isLoading;
+  final String? error;
 
-  const TaskState({required this.tasks, required this.isLoading});
+  const TaskState({
+    required this.tasks,
+    required this.isLoading,
+    this.error,
+  });
 
-  const TaskState.initial() : this(tasks: const [], isLoading: false);
+  const TaskState.initial() : this(tasks: const [], isLoading: false, error: null);
 
-  TaskState copyWith({List<Task>? tasks, bool? isLoading}) {
+  TaskState copyWith({
+    List<Task>? tasks,
+    bool? isLoading,
+    String? Function()? error,
+  }) {
     return TaskState(
       tasks: tasks ?? this.tasks,
       isLoading: isLoading ?? this.isLoading,
+      error: error != null ? error() : this.error,
     );
   }
 
   @override
-  List<Object> get props => [tasks, isLoading];
+  List<Object?> get props => [tasks, isLoading, error];
 }
 
 @injectable
@@ -38,25 +48,42 @@ class TaskCubit extends Cubit<TaskState> {
   }) : super(const TaskState.initial());
 
   Future<void> addTaskAction(String title) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, error: () => null));
 
-    await addTask(title);
-    final tasks = await getTasks();
-    emit(TaskState(tasks: tasks, isLoading: false));
+    try {
+      final newTask = await addTask(title);
+      final currentTasks = List<Task>.from(state.tasks);
+      currentTasks.add(newTask);
+      emit(state.copyWith(tasks: currentTasks, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: () => "Failed to add task"));
+    }
   }
 
   Future<void> loadTasks() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, error: () => null));
 
-    final tasks = await getTasks();
-    emit(TaskState(tasks: tasks, isLoading: false));
+    try {
+      final tasks = await getTasks();
+      emit(TaskState(tasks: tasks, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: () => "Failed to load tasks"));
+    }
   }
 
-  Future<void> toggleTaskAction(String title) async {
-    emit(state.copyWith(isLoading: true));
+  Future<void> toggleTaskAction(String id) async {
+    emit(state.copyWith(isLoading: true, error: () => null));
 
-    await toggleTask(title);
-    final tasks = await getTasks();
-    emit(TaskState(tasks: tasks, isLoading: false));
+    try {
+      await toggleTask(id);
+      final currentTasks = state.tasks.map((t) {
+        if (t.id == id) return t.toggle();
+        return t;
+      }).toList();
+
+      emit(state.copyWith(tasks: currentTasks, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: () => "Failed to toggle task"));
+    }
   }
 }

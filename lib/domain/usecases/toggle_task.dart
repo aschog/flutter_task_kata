@@ -5,5 +5,5 @@ import 'package:injectable/injectable.dart';
 class ToggleTask {
   ToggleTask(this.repo);
   final TaskRepository repo;
-  Future<void> call(String title) => repo.toggleTask(title);
+  Future<void> call(String id) => repo.toggleTask(id);
 }

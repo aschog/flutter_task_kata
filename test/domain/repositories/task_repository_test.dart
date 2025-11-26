@@ -6,19 +6,20 @@ class DummyRepo implements TaskRepository {
   final List<Task> _list = <Task>[];
 
   @override
-  Future<void> addTask(String title) async => _list.add(Task(title: title));
+  Future<void> addTask(Task task) async => _list.add(task);
 
   @override
   Future<List<Task>> getTasks() async => _list;
 
   @override
-  Future<void> toggleTask(String title) async {}
+  Future<void> toggleTask(String id) async {}
 }
 
 void main() {
   test('task repository contract works', () async {
     final repo = DummyRepo();
-    await repo.addTask('A');
+    const task = Task(id: '1', title: 'A');
+    await repo.addTask(task);
     final tasks = await repo.getTasks();
     expect(tasks.first.title, 'A');
   });

@@ -139,9 +139,9 @@ class MockTaskCubit extends _i1.Mock implements _i5.TaskCubit {
           as _i6.Future<void>);
 
   @override
-  _i6.Future<void> toggleTaskAction(String? title) =>
+  _i6.Future<void> toggleTaskAction(String? id) =>
       (super.noSuchMethod(
-            Invocation.method(#toggleTaskAction, [title]),
+            Invocation.method(#toggleTaskAction, [id]),
             returnValue: _i6.Future<void>.value(),
             returnValueForMissingStub: _i6.Future<void>.value(),
           )

@@ -15,9 +15,9 @@ class InMemoryTaskRepository implements TaskRepository {
   }
 
   @override
-  Future<void> addTask(String title) async {
+  Future<void> addTask(Task task) async {
     await _simulateDelay();
-    _tasks.add(Task(title: title));
+    _tasks.add(task);
   }
 
   @override
@@ -27,10 +27,10 @@ class InMemoryTaskRepository implements TaskRepository {
   }
 
   @override
-  Future<void> toggleTask(String title) async {
+  Future<void> toggleTask(String id) async {
     await _simulateDelay();
 
-    final index = _tasks.indexWhere((task) => task.title == title);
+    final index = _tasks.indexWhere((task) => task.id == id);
     if (index == -1) return;
 
     final updated = _tasks[index].toggle();
