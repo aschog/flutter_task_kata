@@ -13,7 +13,7 @@ import 'task_screen_test.mocks.dart';
 void main() {
   late MockTaskCubit mockCubit;
 
-  const initalState = TaskState(tasks: [], isLoading: false);
+  const initialState = TaskState(tasks: [], isLoading: false);
 
   Widget makeTestable(Widget child) {
     return MaterialApp(
@@ -23,8 +23,8 @@ void main() {
 
   setUp(() {
     mockCubit = MockTaskCubit();
-    when(mockCubit.state).thenReturn(initalState);
-    when(mockCubit.stream).thenAnswer((_) => Stream.value(initalState));
+    when(mockCubit.state).thenReturn(initialState);
+    when(mockCubit.stream).thenAnswer((_) => Stream.value(initialState));
   });
 
   testWidgets('shows empty message when no tasks', (tester) async {
