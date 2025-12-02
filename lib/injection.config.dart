@@ -15,6 +15,7 @@ import 'package:flutter_task_kata/domain/repositories/task_repository.dart'
     as _i17;
 import 'package:flutter_task_kata/domain/usecases/add_task.dart' as _i1027;
 import 'package:flutter_task_kata/domain/usecases/get_tasks.dart' as _i629;
+import 'package:flutter_task_kata/domain/usecases/task_usecases.dart' as _i330;
 import 'package:flutter_task_kata/domain/usecases/toggle_task.dart' as _i795;
 import 'package:flutter_task_kata/presentation/cubit/task_cubit.dart' as _i514;
 import 'package:get_it/get_it.dart' as _i174;
@@ -33,12 +34,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i795.ToggleTask>(
       () => _i795.ToggleTask(gh<_i17.TaskRepository>()),
     );
-    gh.factory<_i514.TaskCubit>(
-      () => _i514.TaskCubit(
-        getTasks: gh<_i629.GetTasks>(),
+    gh.factory<_i330.TaskUseCases>(
+      () => _i330.TaskUseCases(
         addTask: gh<_i1027.AddTask>(),
+        getTasks: gh<_i629.GetTasks>(),
         toggleTask: gh<_i795.ToggleTask>(),
       ),
+    );
+    gh.factory<_i514.TaskCubit>(
+      () => _i514.TaskCubit(gh<_i330.TaskUseCases>()),
     );
     return this;
   }

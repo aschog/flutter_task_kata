@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_task_kata/domain/entities/task.dart';
-import 'package:flutter_task_kata/domain/usecases/add_task.dart';
-import 'package:flutter_task_kata/domain/usecases/get_tasks.dart';
-import 'package:flutter_task_kata/domain/usecases/toggle_task.dart';
+import 'package:flutter_task_kata/domain/usecases/task_usecases.dart';
 import 'package:injectable/injectable.dart';
 
 class TaskState extends Equatable {
@@ -17,7 +15,8 @@ class TaskState extends Equatable {
     this.error,
   });
 
-  const TaskState.initial() : this(tasks: const [], isLoading: false, error: null);
+  const TaskState.initial()
+      : this(tasks: const [], isLoading: false, error: null);
 
   TaskState copyWith({
     List<Task>? tasks,
@@ -37,21 +36,15 @@ class TaskState extends Equatable {
 
 @injectable
 class TaskCubit extends Cubit<TaskState> {
-  final AddTask addTask;
-  final GetTasks getTasks;
-  final ToggleTask toggleTask;
+  final TaskUseCases _useCases;
 
-  TaskCubit({
-    required this.getTasks,
-    required this.addTask,
-    required this.toggleTask,
-  }) : super(const TaskState.initial());
+  TaskCubit(this._useCases) : super(const TaskState.initial());
 
   Future<void> addTaskAction(String title) async {
     emit(state.copyWith(isLoading: true, error: () => null));
 
     try {
-      final newTask = await addTask(title);
+      final newTask = await _useCases.addTask(title);
       final currentTasks = List<Task>.from(state.tasks);
       currentTasks.add(newTask);
       emit(state.copyWith(tasks: currentTasks, isLoading: false));
@@ -64,7 +57,7 @@ class TaskCubit extends Cubit<TaskState> {
     emit(state.copyWith(isLoading: true, error: () => null));
 
     try {
-      final tasks = await getTasks();
+      final tasks = await _useCases.getTasks();
       emit(TaskState(tasks: tasks, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: () => "Failed to load tasks"));
@@ -75,7 +68,7 @@ class TaskCubit extends Cubit<TaskState> {
     emit(state.copyWith(isLoading: true, error: () => null));
 
     try {
-      await toggleTask(id);
+      await _useCases.toggleTask(id);
       final currentTasks = state.tasks.map((t) {
         if (t.id == id) return t.toggle();
         return t;
@@ -83,7 +76,8 @@ class TaskCubit extends Cubit<TaskState> {
 
       emit(state.copyWith(tasks: currentTasks, isLoading: false));
     } catch (e) {
-      emit(state.copyWith(isLoading: false, error: () => "Failed to toggle task"));
+      emit(
+          state.copyWith(isLoading: false, error: () => "Failed to toggle task"));
     }
   }
 }
